@@ -9,6 +9,7 @@ import 'package:onscreen_keyboard/src/utils.dart';
 ///
 class OnscreenKeyboard extends StatelessWidget {
   final ValueChanged<String?>? onChanged;
+  final Function(String,bool)? onTap;
   final String? value;
   final InitialCase initialCase;
   final Color? borderColor;
@@ -17,6 +18,7 @@ class OnscreenKeyboard extends StatelessWidget {
   final Color? focusColor;
   OnscreenKeyboard({
     this.onChanged,
+    this.onTap,
     this.backgroundColor,
     this.focusColor,
     this.borderColor,
@@ -33,6 +35,7 @@ class OnscreenKeyboard extends StatelessWidget {
       ],
       child: OnscreenKeyboardWidget(
         onChanged: onChanged,
+        onTap: onTap,
         initialCase: initialCase,
         value: value,
         borderColor: borderColor,
@@ -46,6 +49,7 @@ class OnscreenKeyboard extends StatelessWidget {
 
 class OnscreenKeyboardWidget extends StatefulWidget {
   final ValueChanged<String?>? onChanged;
+  final Function(String,bool is_down)? onTap;
   final InitialCase? initialCase;
   final String? value;
   final Color? borderColor;
@@ -54,6 +58,7 @@ class OnscreenKeyboardWidget extends StatefulWidget {
   final Color? focusColor;
   OnscreenKeyboardWidget({
     this.onChanged,
+    this.onTap,
     this.backgroundColor,
     this.focusColor,
     this.borderColor,
@@ -172,10 +177,20 @@ class _OnscreenKeyboardWidgetState extends State<OnscreenKeyboardWidget> {
                         borderColor: widget.borderColor ?? widget.borderColor,
                         buttonColor: widget.buttonColor ?? widget.buttonColor,
                         onPressed: () {
+                          //shift();
+                        },
+                        onTapDown: () {
                           shift();
+                        },
+                        onTapUp: (){
+
+                        },
+                        onTapCancel: (){
+
                         },
                         label: new Icon(
                           Icons.arrow_upward,
+                          color: Colors.white,
                         ),
                       ),
                     ),
@@ -190,9 +205,17 @@ class _OnscreenKeyboardWidgetState extends State<OnscreenKeyboardWidget> {
                           setState(() {});
                           widget.onChanged!(text);
                         },
+                        onTapDown: () {
+                          //widget.ontap
+                        },
+                        onTapUp: (){
+
+                        },
+                        onTapCancel: (){
+                        },
                         label: new Text(
                           'CLEAR',
-                          style: new TextStyle(
+                          style: new TextStyle(color: Colors.white,
                               fontSize: 17, fontWeight: FontWeight.bold),
                         ),
                       ),
@@ -208,8 +231,17 @@ class _OnscreenKeyboardWidgetState extends State<OnscreenKeyboardWidget> {
                           setState(() {});
                           widget.onChanged!(text);
                         },
+                        onTapDown: () {
+                          //widget.ontap
+                        },
+                        onTapUp: (){
+
+                        },
+                        onTapCancel: (){
+                        },
                         label: new Icon(
                           Icons.space_bar,
+                          color: Colors.white,
                           size: 35,
                         ),
                       ),
@@ -238,8 +270,17 @@ class _OnscreenKeyboardWidgetState extends State<OnscreenKeyboardWidget> {
                   setState(() {});
                   widget.onChanged!(text);
                 },
+                onTapDown: () {
+                  
+                },
+                onTapUp: (){
+
+                },
+                onTapCancel: (){
+                },
                 label: new Icon(
                   Icons.backspace,
+                  color: Colors.white,
                   size: 20,
                 ),
               ),
@@ -251,12 +292,21 @@ class _OnscreenKeyboardWidgetState extends State<OnscreenKeyboardWidget> {
                 onPressed: () {
                   specialCharacters();
                 },
+                onTapDown: () {
+                          //widget.ontap
+                        },
+                        onTapUp: (){
+
+                        },
+                        onTapCancel: (){
+                        },
                 label: new BlocBuilder<KeyboardShiftBloc, KeyboardShiftState>(
                   builder: (context, state) {
                     if (state is KeyboardShiftSymbols) {
                       return Text(
                         'ABC',
                         style: new TextStyle(
+                          color: Colors.white,
                             fontSize: 17, fontWeight: FontWeight.bold),
                       );
                     } else {
@@ -282,7 +332,7 @@ class _OnscreenKeyboardWidgetState extends State<OnscreenKeyboardWidget> {
         shrinkWrap: true,
         itemCount: labels.length,
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 7,
+          crossAxisCount: 10,
         ),
         itemBuilder: (context, index) {
           return new Button(
@@ -292,12 +342,17 @@ class _OnscreenKeyboardWidgetState extends State<OnscreenKeyboardWidget> {
             buttonColor: widget.buttonColor ?? widget.buttonColor,
             label: new Text(
               labels[index],
-              style: new TextStyle(fontSize: 25),
+              style: new TextStyle(color: Colors.white,fontSize: 25),
             ),
-            onPressed: () {
-              text = text! + labels[index];
-              setState(() {});
-              widget.onChanged!(text);
+            onPressed: null,
+            onTapDown: () {
+              widget.onTap!(labels[index],true);
+            },
+            onTapUp: (){
+              widget.onTap!(labels[index],false);
+            },
+            onTapCancel: (){
+              widget.onTap!(labels[index],false);
             },
           );
         });

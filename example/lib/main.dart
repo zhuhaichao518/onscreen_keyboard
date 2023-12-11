@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
+  MyHomePage({required this.title});
 
   final String title;
 
@@ -53,7 +53,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   focusColor: Colors.red,
                   onChanged: (txt) {
                     setState(() {
-                      text = txt;
+                      text = txt!;
                     });
                   },
                 ),

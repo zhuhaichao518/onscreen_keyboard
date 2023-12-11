@@ -8,8 +8,14 @@ class Button extends StatefulWidget {
   final Color? buttonColor;
   final Color? focusColor;
   final bool? autofocus;
+  final Function? onTapDown;
+  final Function? onTapUp;
+  final Function? onTapCancel;
   Button({
     required this.label,
+    this.onTapDown,
+    this.onTapUp,
+    this.onTapCancel,
     this.onPressed,
     this.autofocus,
     this.borderColor,
@@ -32,7 +38,15 @@ class _ButtonState extends State<Button> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return Listener(
+      onPointerDown: (PointerDownEvent details) {
+        widget.onTapDown!();
+      },
+      onPointerUp: (PointerUpEvent details) {
+        widget.onTapUp!();
+      },
+      behavior: HitTestBehavior.translucent,
+      child: Container(
       margin: EdgeInsets.all(2),
       child: RawMaterialButton(
         highlightElevation: 0,
@@ -52,6 +66,7 @@ class _ButtonState extends State<Button> {
           label: widget.label,
         ),
       ),
+    ),
     );
   }
 }
